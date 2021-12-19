@@ -5,7 +5,8 @@ services:
     image: mysql:8.0
     container_name: db
     restart: unless-stopped
-    env_file: buttonymood.art.prod.env
+    env_file:
+      - buttonymood.art.prod.env
     environment:
       - MYSQL_DATABASE=buttonymood
     volumes:
@@ -19,11 +20,12 @@ services:
     image: wordpress:5.8.1-fpm-alpine
     container_name: wordpress
     restart: unless-stopped
-    env_file: buttonymood.art.prod.env
+    env_file:
+      - buttonymood.art.prod.env
     environment:
-      - WORDPRESS_DB_HOST=db:3306
-      - WORDPRESS_DB_USER=$MYSQL_USER
-      - WORDPRESS_DB_PASSWORD=$MYSQL_PASSWORD
+      - WORDPRESS_DB_HOST=db
+      - WORDPRESS_DB_USER=wordpress
+      - WORDPRESS_DB_PASSWORD=${MYSQL_PASSWORD}
       - WORDPRESS_DB_NAME=buttonymood
     volumes:
       - wordpress:/var/www/html
@@ -36,7 +38,7 @@ services:
     container_name: nginx
     restart: unless-stopped
     ports:
-      # - "80:80"
+      - "80:80"
       - "443:443"
     volumes:
       - wordpress:/var/www/html
